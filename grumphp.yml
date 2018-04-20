@@ -1,0 +1,61 @@
+parameters:
+  git_dir: .
+  bin_dir: vendor/bin
+  root_dir: .
+  tasks:
+    phpcs:
+      standard: '%root_dir%/bin/static_analysis/phpcs.ruleset.xml'
+      tab_width: 4
+      whitelist_patterns: []
+      encoding: utf-8
+      ignore_patterns: []
+      sniffs: []
+      triggered_by: [php]
+    phpmd:
+      ruleset: ['%root_dir%/bin/static_analysis/phpmd.ruleset.xml']
+    phpcsfixer2:
+      cache_file: '%root_dir%/.php_cs.cache'
+      allow_risky: true
+      config: '%root_dir%/.php_cs'
+      using_cache: true
+      config_contains_finder: true
+      verbose: false
+      diff: true
+      triggered_by: ['php']
+    phpstan:
+      autoload_file: ~
+      configuration: '%root_dir%/bin/static_analysis/phpstan.neon'
+      level: 7
+      ignore_patterns:
+        - example.php
+        - DependencyInjection/Configuration.php
+      triggered_by: ['php']
+    phpparser:
+      ignore_patterns:
+        - autoload.php
+        - config/bundles.php
+        - public/index.php
+        - example.php
+        - DependencyInjection/
+        - Migrations/
+      kind: php7
+      visitors:
+        declare_strict_types: ~
+        no_exit_statements: ~
+        never_use_else: ~
+        forbidden_class_method_calls:
+            blacklist:
+                - '$dumper->dump'
+        forbidden_function_calls:
+            blacklist:
+                - 'var_dump'
+        forbidden_static_method_calls:
+            blacklist:
+                - 'Dumper::dump'
+      triggered_by: [php]
+    phplint: ~
+    yamllint: ~ # comment it if you are using "!php/const" in your yaml
+    jsonlint: ~
+    phpversion: ~
+    securitychecker: ~
+    shell: ~
